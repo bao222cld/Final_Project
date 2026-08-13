@@ -6,11 +6,11 @@ AI Self-Review (node 7, chạy trên bộ 20 test case) báo cáo **5 nhóm vấ
 
 | # | Nhóm vấn đề AI báo cáo | Kết quả kiểm tra lại (Human) |
 |---|---|---|
-| 1 | Traceability — Source ghi mơ hồ ("Step X"/"Cond TC16-XX") cho 9 TC | ✅ **ĐÚNG** — xác nhận thật, đã sửa ở file 04 |
-| 2 | Traceability — "TC16-03, TC16-04 dùng BRL-16-03 nhưng BRL-16-03 không tồn tại" | ❌ **SAI — AI bịa/nói nhầm.** BRL-16-03 **có tồn tại** ("The search box allows partial match on all columns"), đúng như trong PHẦN A của 02_risk_analysis.md. AI tự mâu thuẫn với chính output business rule mà nó đã sinh ra trước đó. |
-| 3 | Priority — đề nghị nâng P2→P1 cho 5 TC (06, 08, 16, 17, 19) | ⚠️ **ĐÚNG MỘT PHẦN** — Human chỉ đồng ý nâng **2/5** (TC16-16, TC16-19), giữ nguyên P2 cho TC16-06, 08, 17 vì rủi ro thực tế thấp hơn AI đánh giá (xem lý do BA ở file 04). |
-| 4 | Quality — Expected Result thiếu tiêu chí đo lường, cho 8 TC | ✅ **ĐÚNG** — đã bổ sung tiêu chí cụ thể ở file 04. |
-| 5 | Quality — TC16-20 tiêu chí pass/fail không rõ | ✅ **ĐÚNG** — đã bổ sung rõ điều kiện PASS/FAIL ở file 04. |
+| 1 | Traceability — Source ghi mơ hồ ("Step X"/"Cond TC16-XX") cho 9 TC | **ĐÚNG** — xác nhận thật, đã sửa ở file 04 |
+| 2 | Traceability — "TC16-03, TC16-04 dùng BRL-16-03 nhưng BRL-16-03 không tồn tại" | **SAI — AI bịa/nói nhầm.** BRL-16-03 **có tồn tại** ("The search box allows partial match on all columns"), đúng như trong PHẦN A của 02_risk_analysis.md. AI tự mâu thuẫn với chính output business rule mà nó đã sinh ra trước đó. |
+| 3 | Priority — đề nghị nâng P2→P1 cho 5 TC (06, 08, 16, 17, 19) | **ĐÚNG MỘT PHẦN** — Human chỉ đồng ý nâng **2/5** (TC16-16, TC16-19), giữ nguyên P2 cho TC16-06, 08, 17 vì rủi ro thực tế thấp hơn AI đánh giá (xem lý do BA ở file 04). |
+| 4 | Quality — Expected Result thiếu tiêu chí đo lường, cho 8 TC | **ĐÚNG** — đã bổ sung tiêu chí cụ thể ở file 04. |
+| 5 | Quality — TC16-20 tiêu chí pass/fail không rõ | **ĐÚNG** — đã bổ sung rõ điều kiện PASS/FAIL ở file 04. |
 
 **→ AI tìm đúng thực chất: 4/5 nhóm (nhóm #2 là kết luận sai/bịa đặt).**
 Ở bước ambiguity analysis trước đó (node 2), AI cũng tìm ra **11/11 vấn đề hợp lệ** (0 invalid), trong đó 9 valid rõ ràng, 2 cần bàn thêm nhưng không sai bản chất.
