@@ -1,0 +1,44 @@
+# 01. AMBIGUITY ANALYSIS — UC16: View Interview Schedule
+
+## A. OUTPUT AGENT (AI tự sinh — node 2)
+
+| # | Loại | Vị trí | Trích dẫn | Vì sao là vấn đề | Câu hỏi cho BA |
+|---|---|---|---|---|---|
+| 1 | CONFLICTING | Overview, Screen Description, Business Rule | "This use case allows user to view interview schedule list" vs. "Add", "Edit", "Submit result" | Use Case tên là "View..." nhưng lại mô tả cả các chức năng tạo, sửa, submit kết quả | Use case này chỉ để view hay bao gồm cả thêm/sửa/submit kết quả? Có cần tách use case? |
+| 2 | AMBIGUOUS | Screen Description 4.1, Search box | "Allow to search partial match on all columns in the result table" | Không rõ search box có bao gồm cả trường ẩn không, hay chỉ các cột hiển thị | Search box tìm trên trường nào? Có bao gồm các trường không hiển thị không? |
+| 3 | MISSING | Screen Description 4.1, Add | "Add... only available for Role B, Role A and Role C" | Không nói rõ với Role D thì nút Add sẽ bị ẩn, disabled, hay không hiển thị | Với Role D, nút Add sẽ xử lý thế nào? Ẩn/disabled hay vẫn hiển thị nhưng báo lỗi? |
+| 4 | AMBIGUOUS | Screen Description 4.2, Icon Submit result | "display Submit result screen for interviewer. Not available for Role B, Role A and Role C" | Không rõ "interviewer" ở đây có đúng chỉ là Role D không, hay các role khác cũng có thể là interviewer | "Interviewer" ở đây có đúng chỉ là Role D không? Có trường hợp role khác là interviewer? |
+| 5 | MISSING | Screen Description 4.2, Schedule | "Display the Schedule time in format: DD/MM/YYYY HH:MM – HH:MM" | Không nói rõ nếu lịch phỏng vấn kéo dài nhiều ngày thì sẽ hiển thị như thế nào | Nếu interview kéo dài qua nhiều ngày thì Schedule hiển thị ra sao? |
+| 6 | MISSING | Screen Description 4.2, Result | "Display the interview result: Passed or Failed. If no result yet, display as N/A" | Nếu lịch phỏng vấn bị hủy (Cancelled), cột Result sẽ hiển thị gì? | Nếu status là "Cancelled", cột Result sẽ hiển thị gì? |
+| 7 | MISSING | Screen Description 4.1, Search Button | "If no data match, show ME008..." | Không nói rõ khi vừa vào màn hình (chưa search) mà không có dữ liệu thì có hiển thị thông báo này không | Khi vừa vào màn hình mà không có dữ liệu, có hiển thị ME008 không? |
+| 8 | MISSING | Screen Description 4.1, kết hợp filter | "Search box", "Interviewer", "Status" | Không nói rõ có thể kết hợp nhiều điều kiện search không | Có thể kết hợp search box + filter Interviewer + Status cùng lúc không? |
+| 9 | MISSING | Screen Description 4.2, Icon view | "display view interview details schedule screen" | Không mô tả chi tiết màn hình View interview details | Có tài liệu mô tả chi tiết màn hình View interview details không? |
+| 10 | MISSING | Overview, Pre-condition | "Pre-condition: System is available" | Không nói rõ trạng thái đăng nhập, phân quyền | Pre-condition có cần bổ sung trạng thái đăng nhập/phân quyền không? |
+| 11 | CONFLICTING | Mock-up Screen, URL | URL mock-up là `.../candidate-list` | URL là candidate-list nhưng màn hình là interview schedule, có thể gây nhầm lẫn | URL này có đúng là của màn hình lịch phỏng vấn không? |
+
+## B. HUMAN REVIEW — Đánh giá của học viên (làm ngoài workflow)
+
+Đối chiếu trực tiếp với UC16 gốc (Overview, Flow of events, Screen Description 3.16.4, Business Rules 3.16.5, Mock-up Pic.15/Pic.25).
+
+| # | Kết luận | Giải thích của học viên | Trả lời (đóng vai BA) |
+|---|---|---|---|
+| 1 | **HỢP LỆ** | Overview ghi rõ "This use case allows user to view interview schedule list" nhưng Screen Description lại mô tả Add/Edit/Submit result — xung đột thật. | UC nên đổi tên thành "Interview Schedule Management" hoặc tách UC con "View" riêng khỏi "Add/Edit/Submit result". Tạm giữ nguyên phạm vi hiện tại, chỉ sửa Description cho khớp scope thực tế. |
+| 2 | **HỢP LỆ** | Đúng là REF 3 chỉ ghi "search partial match on all columns in the result table" mà không liệt kê cụ thể cột nào bị loại trừ. | Search chỉ áp dụng trên các cột **đang hiển thị** trong bảng (Title, Candidate, Interviewer, Schedule, Result, Status, Job), không bao gồm trường ẩn/ID nội bộ. |
+| 3 | **HỢP LỆ** | REF 7 chỉ nói "only available for Manager, Recruiter and Admin", không nói rõ hành vi với Interviewer (Role D). | Với Role D: **ẩn hoàn toàn** nút Add (không render), không phải disable. |
+| 4 | **CẦN BÀN THÊM** | Câu hỏi AI đặt ra đúng nhưng chưa chạm vào gốc vấn đề. Vấn đề thật nằm ở chỗ REF 16 ghi "Not available for **Manager, HR and Admin**" trong khi Actor list và BRL-16-01 dùng từ "**Recruiter**", không có role nào tên "HR" được định nghĩa trong UC. Đây là xung đột thuật ngữ, không chỉ là mơ hồ về nghĩa từ "interviewer". | Cần BA xác nhận "HR" trong REF 16 có phải chính là "Recruiter" (lỗi đánh máy) hay là một role thứ 5 chưa được định nghĩa trong Actor list. |
+| 5 | **HỢP LỆ** | Đúng, format DD/MM/YYYY HH:MM – HH:MM chỉ đủ cho 1 ngày. | Trường hợp phỏng vấn qua nhiều ngày: hiển thị `DD/MM/YYYY HH:MM – DD/MM/YYYY HH:MM` (thêm ngày kết thúc). Cần cập nhật spec. |
+| 6 | **HỢP LỆ** (đã có bằng chứng gián tiếp) | Spec không ghi rõ, nhưng Mock-up (Pic.15/Pic.25, dòng "Interview Solution Architect") cho thấy khi Status = Cancelled thì Result = "N/A". Đây là bằng chứng thực tế nhưng chưa được viết thành rule chính thức. | Xác nhận và bổ sung chính thức vào Screen Description: "Nếu Status = Cancelled, Result luôn hiển thị N/A". |
+| 7 | **HỢP LỆ** | Đúng, chưa rõ trường hợp danh sách rỗng ngay lần đầu vào màn hình (chưa bấm Search) có hiển thị ME008 không. | Không hiển thị ME008 khi mới vào màn hình; ME008 chỉ hiển thị **sau khi user chủ động bấm Search** mà không có kết quả. Nếu dữ liệu rỗng ngay từ đầu, hiển thị empty-state khác (ví dụ "No interview schedule yet"). |
+| 8 | **HỢP LỆ — có ảnh hưởng trực tiếp tới test case** | Đúng là spec không nói rõ 3 điều kiện lọc (Search box, Interviewer, Status) có kết hợp AND với nhau không. Bộ test case gốc (TC16-03 → TC16-09) chỉ test **từng filter riêng lẻ**, không có test case nào test kết hợp — đây là **gap coverage thật sự**. | Xác nhận 3 điều kiện lọc kết hợp theo logic **AND**. Yêu cầu bổ sung test case kết hợp (xem TC16-21 ở file 04). |
+| 9 | **CẦN BÀN THÊM** | Hợp lý về mặt lý thuyết, nhưng nhiều khả năng màn hình "View interview details" thuộc một UC khác (ngoài phạm vi UC16) nên không bắt buộc phải mô tả ở đây. | Nếu có UC riêng cho "View interview details", ghi rõ tham chiếu (ví dụ UCxx) trong UC16 để tránh hiểu nhầm là thiếu tài liệu. |
+| 10 | **HỢP LỆ** | Đúng, Pre-condition chỉ ghi "System is available", chưa nói rõ user phải đăng nhập với role hợp lệ nào. | Bổ sung Pre-condition: "User đã đăng nhập với role Recruiter/Manager/Admin/Interviewer". |
+| 11 | **HỢP LỆ** | Xác nhận qua ảnh chụp mock-up thực tế: URL là `https://ims.recruitment.com/candidate-list`, path vẫn là "candidate-list" dù màn hình là Interview Schedule — xung đột thật, không phải do AI đọc nhầm. | Sửa URL mock-up thành `.../interview-schedule` cho khớp chức năng, hoặc xác nhận đây là URL dùng chung (tạm chấp nhận). |
+
+## C. TỰ TÌM THÊM — Vấn đề AI bỏ sót (quan trọng nhất)
+
+| # | Loại | Vị trí | Mô tả vấn đề | Vì sao AI bỏ sót là nghiêm trọng | Câu hỏi cho BA |
+|---|---|---|---|---|---|
+| 12 | **MISSING (nghiêm trọng)** | Mock-up Pic.15/Pic.25 vs Screen Description 3.16.4.2 | Mock-up có **cột "Job"** hiển thị dữ liệu thật (Dev Ov, Dev 2, PM, BA, Tester, Account Manager...) nhưng bảng field description (REF 8–16) **không hề khai báo field này** — không có tên field, kiểu dữ liệu, mô tả, nguồn dữ liệu. | Đây là field hiển thị thật trên UI nhưng hoàn toàn không có đặc tả → không thể viết test case đúng chuẩn (không biết validate gì, lấy dữ liệu từ đâu — Job title của candidate hay của interviewer?). Bộ 20 test case gốc **không có test case nào cho cột Job**. | Cột "Job" lấy dữ liệu từ đâu (Job của candidate ứng tuyển)? Đề nghị bổ sung REF mới vào bảng 3.16.4.2 với type, mô tả, business rule liên quan (nếu có). |
+| 13 | **CONFLICTING (nghiêm trọng)** | Screen Description REF 16 vs Overview/Actor list vs BRL-16-01 | REF 16 (Icon Submit result) ghi "Not available for Manager, **HR** and Admin", trong khi toàn bộ tài liệu còn lại (Actor list, BRL-16-01) chỉ dùng "**Recruiter**", không hề định nghĩa role "HR". | Nếu "HR" là 1 role riêng biệt (khác Recruiter) thì ma trận phân quyền Role A/B/C/D dùng trong toàn bộ 20 test case hiện tại là **sai/thiếu** (thiếu 1 role, thiếu test case cho role đó). Nếu chỉ là lỗi đánh máy thì không ảnh hưởng — nhưng phải xác nhận trước khi chốt test case, không được tự suy đoán. | "HR" có phải là tên gọi khác của "Recruiter" không, hay là 1 role riêng cần thêm vào Actor list và bổ sung test case phân quyền? |
+
+**Cập nhật UC.md theo kết quả review:** cần bổ sung field "Job" vào 3.16.4.2, sửa REF 16 thống nhất role "Recruiter"/"HR", bổ sung rule kết hợp filter (AND), bổ sung rule Result khi Cancelled, sửa Pre-condition, sửa URL mock-up.
